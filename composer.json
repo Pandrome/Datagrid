@@ -1,0 +1,36 @@
+{
+    "name": "pandrome/datagrid",
+    "description": "A laravel package for using datagrids.",
+    "version": "1.0.0.0",
+    "keywords": [
+        "datagrid",
+		"grid",
+        "pandrome"
+		
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pandrome",
+			"email": "pandrome.datagrid@gmail.com"
+        }
+    ],
+    "extra" : {
+        "laravel" : {
+            "providers" : [
+                "Pandrome\\Datagrid\\DatagridServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "php": ">=7.2",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "~2.6",
+        "friendsofphp/php-cs-fixer": "~2.12"
+    },
+    "autoload": {
+        "psr-4": { "Pandrome\\Datagrid\\" : "src/" }
+    }
+}
