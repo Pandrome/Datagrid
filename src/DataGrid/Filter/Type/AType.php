@@ -28,7 +28,9 @@ class AType implements IType
 
         $operator = static::$operator;
         $query->whereHas($column->relation, function($query) use ($columnName, $operator, $value) {
-            return $query->where($columnName, $operator, $value);
+            $columnParts = explode('.', $columnName);
+            $column = array_pop($columnParts);
+            return $query->where($column, $operator, $value);
         });
     }
 

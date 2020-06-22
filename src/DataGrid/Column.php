@@ -2,9 +2,11 @@
 
 namespace Pandrome\Datagrid\DataGrid;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Pandrome\Datagrid\DataGrid\Column\Type;
 use Pandrome\Datagrid\DataGrid\Filter\Builder as FilterBuilder;
-use Carbon\Carbon;
 use ReflectionObject;
 use ReflectionProperty;
 
@@ -67,20 +69,50 @@ class Column
 
             if (!empty($this->relation) && empty($rendered['options'])) {
                 $rendered['options'] = [['label' => '', 'value' => '']];
-                $columnParts = explode('.', $this->column);
-                $allOptions = (new $this->model)->{$columnParts[0]}()->getModel()::all();
-                foreach ($allOptions as $option) {
-                    if (isset($option[$columnParts[1]])) {
-                        $rendered['options'][] = [
-                            'label' => ucfirst($option[$columnParts[1]]),
-                            'value' => $option[$columnParts[1]]
-                        ];
-                    }
+                $optionValues = $this->optionValues($this->column);
+                foreach ($optionValues as $optionValue) {
+                    $rendered['options'][] = [
+                        'label' => ucfirst($optionValue),
+                        'value' => (string)$optionValue
+                    ];
                 }
             }
         }
 
         return $rendered;
+    }
+
+    protected function optionValues(string $column): array
+    {
+        $relationModel = $this->relationModel($column);
+        $relations = $relationModel->all();
+        $values = [];
+        $columnParts = explode('.', $column);
+        $lastColumn = array_pop($columnParts);
+
+        foreach ($relations as $relation) {
+            if (isset($relation[$lastColumn])) {
+                $values[] = $relation[$lastColumn] ?? "";
+            }
+        }
+
+        return $values;
+    }
+
+    protected function relationModel(string $column, $model = null): Model
+    {
+        $columnParts = explode('.', $column);
+        $firstColumn = array_shift($columnParts);
+        if (is_null($model)) {
+            $model = new $this->model;
+        }
+        try {
+            if ($model->{$firstColumn}() instanceof Relation) {
+                return $this->relationModel(implode('.', $columnParts), $model->{$firstColumn}()->getModel());
+            }
+        } catch (\Exception $e) {}
+
+        return $model;
     }
 
     protected function renderHeaderValue(Filter $filter = null)
@@ -90,6 +122,21 @@ class Column
         }
 
         return $filter ? $filter->value() : '';
+    }
+
+    public static function recursiveIteratorArray(array $data): array
+    {
+        $recIter = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($data), \RecursiveIteratorIterator::SELF_FIRST);
+        $recItArray = [];
+        foreach ($recIter as $val) {
+            $keys = [];
+            foreach (range(0, $recIter->getDepth()) as $depth) {
+                $keys[] = $recIter->getSubIterator($depth)->key();
+            }
+            $recItArray[ join('.', $keys) ] = $val;
+        }
+
+        return $recItArray;
     }
 
     protected function fillProperties()
