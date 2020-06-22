@@ -17,28 +17,31 @@ class Relation implements IType
 
     protected static function values(Column $column, array $data)
     {
-        $values = [];
-        $columnParts = explode('.', $column->column);
-
-        if (isset($data[$columnParts[0]])) {
-            if (isset($columnParts[1])) {
-                if (isset($data[$columnParts[0]][0])) {
-                    foreach ($data[$columnParts[0]] as $row) {
-                        if (isset($row[$columnParts[1]])) {
-                            $values[] = $row[$columnParts[1]];
-                        }
-                    }
-                } else if (isset($data[$columnParts[0]][$columnParts[1]])){
-                    $values[] = $data[$columnParts[0]][$columnParts[1]];
-                }
-            }
-            if (empty($values)) {
-                $values = static::processOptions($column, $data[$columnParts[0]]);
-            }
-        }
+        $values = static::retrieveRelationValues($column, $data);
 
         if (is_array($values)) {
             $values = !empty($values) ? implode(', ', $values) : $column->default;
+        }
+
+        return $values;
+    }
+
+    protected static function retrieveRelationValues(Column $column, array $data)
+    {
+        $recItArray = Column::recursiveIteratorArray($data);
+
+        $values = [];
+        $columnParts = explode('.', $column->column);
+        $lastColumn = array_pop($columnParts);
+        $columnParts = implode('.', $columnParts);
+        if (isset($recItArray[$columnParts][0])) {
+            foreach ($recItArray[$columnParts] as $row) {
+                if (isset($row[$lastColumn])) {
+                    $values[] = static::processOptions($column, $row[$lastColumn]);
+                }
+            }
+        } else if (isset($recItArray[$column->column])) {
+            $values = static::processOptions($column, is_array($recItArray[$column->column]) ? $recItArray[$column->column] : [$recItArray[$column->column]]);
         }
 
         return $values;

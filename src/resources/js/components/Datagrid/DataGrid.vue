@@ -51,10 +51,22 @@
                 <tr v-for="row in rows">
                     <td v-for="column in row">
                         <template v-if="column.type == 'Button'">
-                            <button class="btn" v-for="button in column.buttons" :class="button.class" @click="buttonClick(button.onclick)">
-                                <i :class="button.icon_class"></i>
-                                {{button.label}}
-                            </button>
+                            <template v-if="column.buttonGroup">
+                                <div class="btn-group">
+                                    <button class="btn" v-for="button in column.buttons" :class="button.class" @click="buttonClick(button.onclick, $event)" :disabled="button.disabled"
+                                            :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
+                                        <i :class="button.icon_class"></i>
+                                        {{button.label}}
+                                    </button>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <button class="btn" v-for="button in column.buttons" :class="button.class" @click="buttonClick(button.onclick, $event)" :disabled="button.disabled"
+                                        :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
+                                    <i :class="button.icon_class"></i>
+                                    {{button.label}}
+                                </button>
+                            </template>
                         </template>
                         <template v-else-if="column.type == 'Icon'">
                             <template v-if="column.image != ''">
@@ -245,12 +257,6 @@
                     this.loading = false;
                 });
             },
-            buttonClick(fnc) {
-                eval('this.' + fnc);
-            },
-            goto(url) {
-                window.location = url;
-            },
             delete(data) {
                 this.loading = true;
                 axios.delete(data.url).then(response => {
@@ -270,6 +276,18 @@
                 }).finally(() => {
                     this.loading = false;
                 });
+            },
+            buttonClick(fnc, event) {
+                try {
+                    eval('this.$emit(' + fnc + ', this.ob)');
+                } catch (e) {}
+
+                try {
+                    eval('this.' + fnc);
+                } catch (e) {}
+            },
+            goto(url) {
+                window.location = url;
             },
             setPaginationPages() {
                 let paginationPages = [];
