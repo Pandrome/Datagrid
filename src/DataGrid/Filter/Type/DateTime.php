@@ -48,7 +48,15 @@ class DateTime extends AType
                 return [null, null];
             }
 
-            $values = ['from' => (string)$values];
+            if (stripos($values, ' to ') !== false) {
+                $valuesSplit = explode(' to ', $values);
+                $values = [
+                    'from' => (string)$valuesSplit[0] ?? null,
+                    'till' => (string)$valuesSplit[1] ?? null
+                ];
+            } else {
+                $values = ['from' => (string)$values];
+            }
         } else {
             if (!isset($values['from']) && !isset($values['till'])) {
                 $values = array_values($values);
@@ -78,7 +86,7 @@ class DateTime extends AType
         if (!empty($values['from'])) {
             $values['from'] = $values['from']->startOfDay();
         }
-        
+
         if (!empty($values['till'])) {
             $values['till'] = $values['till']->endofDay();
         }

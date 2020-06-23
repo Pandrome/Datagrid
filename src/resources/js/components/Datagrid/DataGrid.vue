@@ -83,11 +83,11 @@
                     <tr>
                         <td :colspan="headers.length" class="text-center">
                             <template v-if="!loading">
-                                No results found
+                                {{noResultsText}}
                             </template>
                             <template v-else>
                                 <div class="spinner-border" role="status">
-                                    <span class="sr-only">Loading...</span>
+                                    <span class="sr-only">{{loadingText}}</span>
                                 </div>
                             </template>
                         </td>
@@ -101,12 +101,12 @@
                     <ul class="pagination">
                         <li class="page-item" :class="page == 1 ? 'disabled' : ''">
                             <button type="button" class="page-link" :aria-disabled="page == 1" @click="changePage(1)">
-                                First
+                                {{firstText}}
                             </button>
                         </li>
                         <li class="page-item" :class="page == 1 ? 'disabled' : ''">
                             <button type="button" class="page-link" :aria-disabled="page == 1" @click="changePage(page - 1 == 0 ? 1 : page - 1)">
-                                Previous
+                                {{previousText}}
                             </button>
                         </li>
                         <li class="page-item" v-for="paginationPage in paginationPages" :class="page == paginationPage ? 'active' : ''">
@@ -117,12 +117,12 @@
                         </li>
                         <li class="page-item" :class="page == lastPage ? 'disabled' : ''">
                             <button type="button" class="page-link" :aria-disabled="page == lastPage" @click="changePage(page + 1 > lastPage ? lastPage : page + 1)">
-                                Next
+                                {{nextText}}
                             </button>
                         </li>
                         <li class="page-item" :class="page == lastPage ? 'disabled' : ''">
                             <button type="button" class="page-link" :aria-disabled="page == lastPage" @click="changePage(lastPage)">
-                                Last ({{lastPage}})
+                                {{lastText}} ({{lastPage}})
                             </button>
                         </li>
                     </ul>
@@ -154,6 +154,30 @@
             containerClass: {
                 type: String,
                 default: 'data-grid-container'
+            },
+            noResultsText: {
+                type: String,
+                default: 'No results found'
+            },
+            loadingText: {
+                type: String,
+                default: 'Loading...'
+            },
+            firstText: {
+                type: String,
+                default: 'First'
+            },
+            previousText: {
+                type: String,
+                default: 'Previous'
+            },
+            nextText: {
+                type: String,
+                default: 'Next'
+            },
+            lastText: {
+                type: String,
+                default: 'Last'
             }
         },
         data() {
@@ -169,6 +193,9 @@
                 visiblePages: 5,
                 allowedPerPage: [],
                 perPage: 10,
+                flatpickrConfig: {
+                    mode: "range"
+                }
             }
         },
         methods: {
@@ -189,6 +216,8 @@
             },
             clearDate(id) {
                 $('#' + id).flatpickr().clear();
+                $('#' + id).flatpickr().destroy();
+                flatpickr($('#' + id).get(0), this.flatpickrConfig);
             },
             changePageCustom() {
                 let page = $('#goto-page').val();
@@ -241,7 +270,9 @@
                 };
 
                 return axios.post(this.url, qs.parse(data)).then(response => {
-                    self.headers = response.data.headers;
+                    if (self.headers.length == 0) {
+                        self.headers = response.data.headers;
+                    }
                     self.rows = response.data.rows;
                     self.sort = response.data.sort;
                     self.direction = response.data.direction;
@@ -250,11 +281,10 @@
                     self.allowedPerPage = response.data.allowedPerPage;
                     self.perPage = response.data.per_page;
                     self.setPaginationPages();
-
                 }).catch(error => {
 
                 }).finally(() => {
-                    this.loading = false;
+                  this.loading = false;
                 });
             },
             delete(data) {
@@ -322,7 +352,7 @@
                 el.addClass('js-flatpickr-enabled');
 
                 // Init it
-                flatpickr(el, {});
+                flatpickr(el, this.flatpickrConfig);
             });
         }
     }
