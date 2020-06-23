@@ -118,6 +118,10 @@ class Column
     protected function renderHeaderValue(Filter $filter = null)
     {
         if ($this->type == Type::TYPE_DATETIME) {
+            if ($filter && stripos($filter->value(), ' to ')) {
+                return $filter->value();
+            }
+
             return $filter && !empty($filter->value()) ? Carbon::createFromDate($filter->value())->format($this->format) : '';
         }
 
