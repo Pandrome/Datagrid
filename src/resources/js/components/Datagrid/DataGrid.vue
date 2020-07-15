@@ -55,7 +55,7 @@
                                 <div class="btn-group">
                                     <template  v-for="button in column.buttons">
                                         <template v-if="button.isLink">
-                                            <a class="btn" :class="button.class" v-bind:href="button.onclick" :disabled="button.disabled" target="_blank"
+                                            <a class="btn" :class="button.class" v-bind:href="button.onclick" :disabled="button.disabled"
                                                :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
                                                 <i :class="button.icon_class"></i>
                                             </a>
@@ -73,7 +73,7 @@
                             <template v-else>
                                 <template  v-for="button in column.buttons">
                                     <template v-if="button.isLink">
-                                        <a class="btn" :class="button.class" v-bind:href="button.onclick" :disabled="button.disabled" target="_blank"
+                                        <a class="btn" :class="button.class" v-bind:href="button.onclick" :disabled="button.disabled"
                                            :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
                                             <i :class="button.icon_class"></i>
                                         </a>
