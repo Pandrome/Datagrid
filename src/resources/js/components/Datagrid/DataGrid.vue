@@ -53,19 +53,39 @@
                         <template v-if="column.type == 'Button'">
                             <template v-if="column.buttonGroup">
                                 <div class="btn-group">
-                                    <button class="btn" v-for="button in column.buttons" :class="button.class" @click="buttonClick(button.onclick, $event)" :disabled="button.disabled"
-                                            :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
-                                        <i :class="button.icon_class"></i>
-                                        {{button.label}}
-                                    </button>
+                                    <template  v-for="button in column.buttons">
+                                        <template v-if="button.isLink">
+                                            <a class="btn" :class="button.class" v-bind:href="button.onclick" :disabled="button.disabled" target="_blank"
+                                               :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
+                                                <i :class="button.icon_class"></i>
+                                            </a>
+                                        </template>
+                                        <template v-else>
+                                            <button class="btn" :class="button.class" @click="buttonClick(button.onclick, $event)" :disabled="button.disabled"
+                                                    :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
+                                                <i :class="button.icon_class"></i>
+                                                {{button.label}}d
+                                            </button>
+                                        </template>
+                                    </template>
                                 </div>
                             </template>
                             <template v-else>
-                                <button class="btn" v-for="button in column.buttons" :class="button.class" @click="buttonClick(button.onclick, $event)" :disabled="button.disabled"
-                                        :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
-                                    <i :class="button.icon_class"></i>
-                                    {{button.label}}
-                                </button>
+                                <template  v-for="button in column.buttons">
+                                    <template v-if="button.isLink">
+                                        <a class="btn" :class="button.class" v-bind:href="button.onclick" :disabled="button.disabled" target="_blank"
+                                           :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
+                                            <i :class="button.icon_class"></i>
+                                        </a>
+                                    </template>
+                                    <template v-else>
+                                        <button class="btn" :class="button.class" @click="buttonClick(button.onclick, $event)" :disabled="button.disabled"
+                                                :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
+                                            <i :class="button.icon_class"></i>
+                                            {{button.label}}
+                                        </button>
+                                    </template>
+                                </template>
                             </template>
                         </template>
                         <template v-else-if="column.type == 'Icon'">
