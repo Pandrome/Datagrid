@@ -1,7 +1,7 @@
 {
     "name": "pandrome/datagrid",
     "description": "A laravel package for using datagrids.",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "keywords": [
         "datagrid",
 		"grid",
@@ -31,5 +31,8 @@
     },
     "autoload": {
         "psr-4": { "Pandrome\\Datagrid\\" : "src/" }
-    }
+    },
+    "post-update-cmd": [
+        "php artisan vendor:publish --provider=\"Pandrome\\Datagrid\\DatagridServiceProvider\" --force"
+    ]
 }

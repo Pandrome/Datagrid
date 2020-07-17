@@ -9,12 +9,12 @@ class Button implements IType
     public static function render(Column $column, array $data): array
     {
         $buttonGroup = !empty($column->options['btnGroup']) ? (bool)$column->options['btnGroup'] : false;
-
-        foreach ($column->options['buttons'] as $index => &$button) {
+        $buttons = $column->options['buttons'];
+        foreach ($buttons as $index => &$button) {
             if (!empty($button['conditionalButtons'])) {
                 $conditionalButton = static::processConditional($button['conditionalButtons'], $data);
                 if (empty($conditionalButton)) {
-                    unset($column->options['buttons'][$index]);
+                    unset($buttons[$index]);
                     continue;
                 }
                 $button = $conditionalButton;
@@ -24,7 +24,7 @@ class Button implements IType
 
         return [
             'column' => $column->column,
-            'buttons' => array_values($column->options['buttons']),
+            'buttons' => array_values($buttons),
             'buttonGroup' => $buttonGroup,
             'type' => $column->type,
             'value' => '',

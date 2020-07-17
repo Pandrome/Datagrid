@@ -1,5 +1,14 @@
 # Release Notes
 
+## [v1.0.5 (2020-07-17)] (https://github.com/Pandrome/Datagrid/compare/1.0.4...1.0.5)
+
+### Updated
+- Now automatically publishes when installing or updating with composer
+- The filter dropdowns will now sort it's values alphabetically
+
+### Fixed
+- Replacing values for buttons now works as intended.
+
 ## [v1.0.4 (2020-07-15)] (https://github.com/Pandrome/Datagrid/compare/1.0.3...1.0.4)
 
 ### Updated
