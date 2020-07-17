@@ -95,6 +95,8 @@ class Column
                 $values[] = $relation[$lastColumn] ?? "";
             }
         }
+        
+        sort($values);
 
         return $values;
     }
