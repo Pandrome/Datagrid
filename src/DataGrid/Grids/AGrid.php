@@ -20,6 +20,7 @@ abstract class AGrid implements IGrid
     protected $perPageKey = 'perPage';
     protected $pageKey = 'page';
     protected $defaultSortDirection;
+    protected $defaultSortColumn;
     protected $orderBy;
     protected $defaultPage = 1;
     protected $page;
@@ -71,6 +72,10 @@ abstract class AGrid implements IGrid
     protected function prepareOrderBy()
     {
         $defaultColumn = (new $this->model)->getKeyName();
+        
+        if (!empty($this->defaultSortColumn)) {
+            $defaultColumn = $this->defaultSortColumn;
+        }
 
         $this->orderBy = new OrderBy($this->parameters[$this->orderByKey] ?? $defaultColumn, $this->parameters[$this->directionKey] ?? $this->defaultSortDirection);
     }
