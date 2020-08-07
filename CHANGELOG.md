@@ -1,5 +1,10 @@
 # Release Notes
 
+## [v1.0.6 (2020-08-07)] (https://github.com/Pandrome/Datagrid/compare/1.0.5...1.0.6)
+
+### Added
+- AGrid now supports a default sort column
+
 ## [v1.0.5 (2020-07-17)] (https://github.com/Pandrome/Datagrid/compare/1.0.4...1.0.5)
 
 ### Updated
