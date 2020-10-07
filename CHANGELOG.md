@@ -1,5 +1,10 @@
 # Release Notes
 
+## [v1.0.7 (2020-10-07)] (https://github.com/Pandrome/Datagrid/compare/1.0.6...1.0.7)
+
+### Added
+- Support for button arguments by adding args.
+
 ## [v1.0.6 (2020-08-07)] (https://github.com/Pandrome/Datagrid/compare/1.0.5...1.0.6)
 
 ### Added

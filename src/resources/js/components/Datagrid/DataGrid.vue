@@ -61,7 +61,7 @@
                                             </a>
                                         </template>
                                         <template v-else>
-                                            <button class="btn" :class="button.class" @click="buttonClick(button.onclick, $event)" :disabled="button.disabled"
+                                            <button class="btn" :class="button.class" @click="buttonClick(button.onclick, button.args, $event)" :disabled="button.disabled"
                                                     :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
                                                 <i :class="button.icon_class"></i>
                                                 {{button.label}}d
@@ -79,7 +79,7 @@
                                         </a>
                                     </template>
                                     <template v-else>
-                                        <button class="btn" :class="button.class" @click="buttonClick(button.onclick, $event)" :disabled="button.disabled"
+                                        <button class="btn" :class="button.class" @click="buttonClick(button.onclick, button.args, $event)" :disabled="button.disabled"
                                                 :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
                                             <i :class="button.icon_class"></i>
                                             {{button.label}}
@@ -327,9 +327,9 @@
                     this.loading = false;
                 });
             },
-            buttonClick(fnc, event) {
+            buttonClick(fnc, args, event) {
                 try {
-                    eval('this.$emit(' + fnc + ', this.ob)');
+                    this.$emit(fnc, { args: args, event: event});
                 } catch (e) {}
 
                 try {
