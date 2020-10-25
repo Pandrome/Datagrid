@@ -16,7 +16,7 @@ class Text implements IType
         return [
             'column' => $column->column,
             'type' => $column->type,
-            'value' => (string)$column->prefix . static::processOptions($column, $text),
+            'value' => (string)$column->prefix . static::processOptions($column, (string)$text),
         ];
     }
 
