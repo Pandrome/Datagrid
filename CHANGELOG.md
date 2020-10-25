@@ -1,5 +1,10 @@
 # Release Notes
 
+## [v1.0.8 (2020-10-25)] (https://github.com/Pandrome/Datagrid/compare/1.0.7...1.0.8)
+
+### Fixed
+- Text field column now type casts to string if null
+
 ## [v1.0.7 (2020-10-07)] (https://github.com/Pandrome/Datagrid/compare/1.0.6...1.0.7)
 
 ### Added
