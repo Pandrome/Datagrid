@@ -18,6 +18,7 @@ class DataGrid
     protected $filterBuilder;
     protected $paginationPath = '';
     protected $allowedPerPage = '';
+    protected $lockedFilters = [];
 
     public function __construct(string $model)
     {
@@ -73,6 +74,11 @@ class DataGrid
         $this->allowedPerPage = $allowedPerPage;
     }
 
+    public function setLockedFilters(array $lockedFilters)
+    {
+        $this->lockedFilters = $lockedFilters;
+    }
+
     public function build(): array
     {
         $this->buildColumns();
@@ -82,7 +88,7 @@ class DataGrid
 
     protected function buildPagination(): array
     {
-        $pagination = (new QueryBuilder($this->model, $this->columnBuilder, $this->filterBuilder, $this->orderBy, $this->page, $this->paginationPath))->query();
+        $pagination = (new QueryBuilder($this->model, $this->columnBuilder, $this->filterBuilder, $this->orderBy, $this->page, $this->paginationPath, $this->lockedFilters))->query();
 
         return (new DataRenderer($pagination, $this->columnBuilder, $this->filterBuilder, $this->orderBy, $this->allowedPerPage))->render();
     }

@@ -19,11 +19,12 @@ class QueryBuilder
     protected $orderBy;
     protected $page;
     protected $paginationPath;
+    protected $lockedFilters;
 
     protected $with = [];
     
     
-    public function __construct(string $model, ColumnBuilder $columnBuilder, FilterBuilder $filterBuilder, OrderBy $orderBy, Page $page, string $paginationPath)
+    public function __construct(string $model, ColumnBuilder $columnBuilder, FilterBuilder $filterBuilder, OrderBy $orderBy, Page $page, string $paginationPath, array $lockedFilters)
     {
         $this->columnBuilder = $columnBuilder;
         $this->filterBuilder = $filterBuilder;
@@ -31,6 +32,7 @@ class QueryBuilder
         $this->orderBy = $orderBy;
         $this->page = $page;
         $this->paginationPath = $paginationPath;
+        $this->lockedFilters = $lockedFilters;
     }
 
     public function query()
@@ -61,12 +63,51 @@ class QueryBuilder
         foreach ($this->filterBuilder->filters() as $filter) {
             $this->handleFilter($filter, $query);
         }
+
+        $this->handleLockedFilters($query);
     }
 
     protected function handleFilter(Filter $filter, EloquentBuilder $query)
     {
         $column = $this->columnBuilder->columnByName($filter->column());
         TypeFilter::filter($query, $column, $filter);
+    }
+
+    protected function handleLockedFilters(EloquentBuilder $query)
+    {
+        foreach($this->lockedFilters as $column => $options) {
+            $this->addLockedFilter($query, $column, $options);
+        }
+    }
+
+    protected function addLockedFilter(EloquentBuilder $query, string $column, array $options)
+    {
+        $operator = '=';
+        if (isset($options['operator'])) {
+            $operator = $options['operator'];
+        } else if (!empty($options['value']) && is_array($options['value'])) {
+            $operator = 'in';
+        }
+        
+        $this->addLockedFilterByOperator($query, $operator, $column, $options['value'] ?? null);
+    }
+
+    protected function addLockedFilterByOperator(EloquentBuilder $query, string $operator, string $column, $value)
+    {
+        switch($operator) {
+            case 'null':
+                $query->whereNull($column);
+                break;
+            case 'notnull':
+                $query->whereNotNull($column);
+                break;
+            default:
+                if (is_null($value)) {
+                    break;
+                }
+                $query->where($column, $operator, $value);
+                break;
+        }
     }
 
     protected function handleColumns()

@@ -25,6 +25,7 @@ abstract class AGrid implements IGrid
     protected $defaultPage = 1;
     protected $page;
     protected $paginationPath = '';
+    protected $lockedFilters = [];
 
     public function __construct(array $parameters = null)
     {
@@ -45,6 +46,8 @@ abstract class AGrid implements IGrid
         $this->dataGrid->setPage($this->page);
         $this->dataGrid->setPaginationPath($this->paginationPath);
         $this->dataGrid->setAllowedPerPage($this->allowedPerPage);
+        $this->dataGrid->setLockedFilters($this->lockedFilters);
+        
         return $this->dataGrid->build();
     }
 

@@ -1,5 +1,16 @@
 # Release Notes
 
+## [v1.0.8 (2020-11-03)] (https://github.com/Pandrome/Datagrid/compare/1.0.8...1.0.9)
+
+### Added
+- Added support for locked filters. In your datagrid add the protected variable $lockedFilters if you want to use preset filters. 
+  Set a column name as the key and within you can use the key "value" which can contain a string or array 
+  and you can use the key operator. Here you can give the operator to be used in the query. Usable operators can be found in
+  laravel/framework/src/Illuminate/Database/Query/Builder.php. When using these operators a value is mandatory.
+  If you need to filter for null or not null use the operator "null" or "notnull" a value is not needed then.
+  Default operators are "in" for an array, otherwise "=".
+  E.g.: In your class that extends AGrid add protected $lockedFilters = [ 'status' => [ 'operator' => '!=', 'value' => 'new' ] ];
+
 ## [v1.0.8 (2020-10-25)] (https://github.com/Pandrome/Datagrid/compare/1.0.7...1.0.8)
 
 ### Fixed
