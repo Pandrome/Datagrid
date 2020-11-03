@@ -1,6 +1,11 @@
 # Release Notes
 
-## [v1.0.8 (2020-11-03)] (https://github.com/Pandrome/Datagrid/compare/1.0.8...1.0.9)
+## [v1.0.10 (2020-11-03)] (https://github.com/Pandrome/Datagrid/compare/1.0.9...1.0.10)
+
+### Fixed
+- Fixed version number
+
+## [v1.0.9 (2020-11-03)] (https://github.com/Pandrome/Datagrid/compare/1.0.8...1.0.9)
 
 ### Added
 - Added support for locked filters. In your datagrid add the protected variable $lockedFilters if you want to use preset filters. 
