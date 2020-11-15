@@ -48,11 +48,14 @@ class DateTime extends AType
                 return [null, null];
             }
 
-            if (stripos($values, ' to ') !== false) {
-                $valuesSplit = explode(' to ', $values);
+            if (stripos($values, 'till') !== false) {
+                $valuesSplit = explode('till', $values);
+                $valuesSplit[0] = trim($valuesSplit[0]);
+                $valuesSplit[1] = trim($valuesSplit[1]);
+
                 $values = [
-                    'from' => (string)$valuesSplit[0] ?? null,
-                    'till' => (string)$valuesSplit[1] ?? null
+                    'from' => (string)(!empty($valuesSplit[0]) ? $valuesSplit[0] : null),
+                    'till' => (string)(!empty($valuesSplit[1]) ? $valuesSplit[1] : null)
                 ];
             } else {
                 $values = ['from' => (string)$values];

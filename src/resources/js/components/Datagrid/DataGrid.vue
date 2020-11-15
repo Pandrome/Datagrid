@@ -3,7 +3,7 @@
         <table class="table">
             <thead>
                 <tr >
-                    <th scope="col" v-for="header in headers">
+                    <th scope="col" v-for="header in headers" :key="header.column + '_name'">
                         <template v-if="header.hasSort">
                             <span @click="resort(header.column)" class="clickable">
                                 {{header.label}}
@@ -18,12 +18,12 @@
                     </th>
                 </tr>
                 <tr>
-                    <td v-for="(header, index) in headers">
+                    <td v-for="(header, index) in headers" :key="header.column + '_field'">
                         <template v-if="header.hasFilter">
                             <template v-if="header.type == 'Select'">
                                 <select :name="header.column" v-model="header.value" class="form-control" @change="filter">
                                     <template v-for="option in header.options">
-                                        <option :value="option.value">
+                                        <option :value="option.value" :key="'header_' + header.column + '_' + option.value">
                                             {{option.label}}
                                         </option>
                                     </template>
@@ -31,11 +31,55 @@
                             </template>
                             <template v-else-if="header.type == 'DateTime'">
                                 <div class="input-group">
-                                    <input class="js-flatpickr form-control bg-white" :name="header.column" v-model="header.value" :data-header-index="index"
-                                           readonly="readonly" :id="header.column + '-datetime'" @change="filter" />
-                                    <button type="button" class="btn btn-sm btn-secondary" @click="clearDate(header.column + '-datetime')">
-                                        <i class="fa fa-remove"></i>
-                                    </button>
+                                    <div class="d-none" :id="'poDate_' + header.column">
+                                        <div class="popover_date">
+                                            <div class="form-group row">
+                                                <label :for="header.column + '_from'" class="col-form-label ml-2">From</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group">
+                                                        <input type="date" class=" form-control" :name="header.column + '_from'" :id="header.column + '-from'"
+                                                            :data-header-index="index + '_from'" :value="getDate(header.value)" />
+                                                        <div class="input-group-prepend">
+                                                            <button type="button" class="btn btn-secondary btn-sm" @click="clearValue(header, '-from')">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label :for="header.column + '_till'" class="col-form-label ml-3">Till</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group">
+                                                        <input type="date" class="form-control" :name="header.column + '_till'" :id="header.column + '-till'"
+                                                            :data-header-index="index + '_till'" :value="getDate(header.value, true)" />
+                                                        <div class="input-group-prepend">
+                                                            <button type="button" class="btn btn-secondary btn-sm" @click="clearValue(header, '-till')">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row d-block m-2 position-relative">
+                                                <button type="button" class="btn btn-secondary" @click="hideDate(header.column + '-date')">
+                                                    Cancel
+                                                </button>
+                                                <button type="button" class="btn btn-primary float-right" @click="applyDate(header)">
+                                                    Apply
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <input class="form-control bg-white" :name="header.column" v-model="header.value" readonly="readonly" data-placement="bottom"
+                                            :id="header.column + '-date'" data-toggle="popover" data-container="body" :data-target="'#poDate_' + header.column" />
+                                        <div class="input-group-prepend">
+                                            <button type="button" class="btn btn-secondary btn-sm" @click="clearValue(header)">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </template>
                             <template v-else-if="header.type == 'Button'"></template>
@@ -48,21 +92,23 @@
             </thead>
             <tbody>
                 <template v-if="rows.length">
-                <tr v-for="row in rows">
-                    <td v-for="column in row">
+                <tr v-for="(row, index) in rows" :key="'r_' + index">
+                    <td v-for="(column, index) in row" :key="'c_' + index">
                         <template v-if="column.type == 'Button'">
                             <template v-if="column.buttonGroup">
                                 <div class="btn-group">
-                                    <template  v-for="button in column.buttons">
+                                    <template  v-for="(button, index) in column.buttons">
                                         <template v-if="button.isLink">
                                             <a class="btn" :class="button.class" v-bind:href="button.onclick" :disabled="button.disabled"
-                                               :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
+                                                :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''" 
+                                                :key="'btn_' + column.name + '_' + index">
                                                 <i :class="button.icon_class"></i>
                                             </a>
                                         </template>
                                         <template v-else>
                                             <button class="btn" :class="button.class" @click="buttonClick(button.onclick, button.args, $event)" :disabled="button.disabled"
-                                                    :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
+                                                    :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''"
+                                                    :key="'btn_' + column.name + '_' + index">
                                                 <i :class="button.icon_class"></i>
                                                 {{button.label}}d
                                             </button>
@@ -71,16 +117,18 @@
                                 </div>
                             </template>
                             <template v-else>
-                                <template  v-for="button in column.buttons">
+                                <template  v-for="(button, index) in column.buttons">
                                     <template v-if="button.isLink">
                                         <a class="btn" :class="button.class" v-bind:href="button.onclick" :disabled="button.disabled"
-                                           :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
+                                           :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''"
+                                           :key="'btn_' + column.name + '_' + index">
                                             <i :class="button.icon_class"></i>
                                         </a>
                                     </template>
                                     <template v-else>
                                         <button class="btn" :class="button.class" @click="buttonClick(button.onclick, button.args, $event)" :disabled="button.disabled"
-                                                :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''">
+                                                :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''"
+                                                :key="'btn_' + column.name + '_' + index">
                                             <i :class="button.icon_class"></i>
                                             {{button.label}}
                                         </button>
@@ -129,7 +177,7 @@
                                 {{previousText}}
                             </button>
                         </li>
-                        <li class="page-item" v-for="paginationPage in paginationPages" :class="page == paginationPage ? 'active' : ''">
+                        <li class="page-item" v-for="(paginationPage, index) in paginationPages" :class="page == paginationPage ? 'active' : ''" :key="'pag_' + index">
                             <button type="button" class="page-link" :aria-current="page == paginationPage ? 'page' : ''"
                             @click="changePage(paginationPage)">
                                 {{paginationPage}}
@@ -153,7 +201,9 @@
                     <span class="goto-prepend"></span>
                     <span class="amount-perpage mr-2">Amount per page</span>
                     <select v-if="allowedPerPage.length > 1" class="mr-4 form-control amount-perpage-select" @change="changeAmountPerPage">
-                        <option v-for="allowed in allowedPerPage" :value="allowed" :selected="perPage == allowed">{{allowed}}</option>
+                        <option v-for="(allowed, index) in allowedPerPage" :value="allowed" :selected="perPage == allowed" :key="'pag_allowed_' + index">
+                            {{allowed}}
+                        </option>
                     </select>
                     <input type="number" name="page" id="goto-page" class="form-control goto-page" v-on:keyup.enter="changePageCustom">
                     <button type="button" class="btn btn-primary input-group-append" @click="changePageCustom">Go to page</button>
@@ -212,10 +262,7 @@
                 lastPage: 1,
                 visiblePages: 5,
                 allowedPerPage: [],
-                perPage: 10,
-                flatpickrConfig: {
-                    mode: "range"
-                }
+                perPage: 10
             }
         },
         methods: {
@@ -234,10 +281,14 @@
                 }
                 this.fetch();
             },
-            clearDate(id) {
-                $('#' + id).flatpickr().clear();
-                $('#' + id).flatpickr().destroy();
-                flatpickr($('#' + id).get(0), this.flatpickrConfig);
+            clearValue(header, id) {
+                if (id != undefined) {
+                    $('#' + header.column + id).val('');
+                    return;
+                }
+
+                header.value = '';
+                this.filter();
             },
             changePageCustom() {
                 let page = $('#goto-page').val();
@@ -358,22 +409,45 @@
                     paginationPages.push(startPage + i);
                 }
                 this.paginationPages = paginationPages;
+            },
+            getDate(date, isTill) {
+                let dates = date.split(' ');
+                if (isTill) {
+                    if (date.indexOf('till') != -1) {
+                        return (dates[dates.length - 1] != undefined ? dates[dates.length - 1] : '');
+                    }
+                    return '';
+                }
+
+                return (dates[0] != undefined ? dates[0] : '');
+            },
+            applyDate(header) {
+                let from = $('#' + header.column + '-from').val();
+                let till = $('#' + header.column + '-till').val();
+                
+                header.value = from + (till != '' ? ' till ' + till : '');
+                $('#' + header.column + '-date').popover('hide');
+                
+                this.filter();
+            },
+            hideDate(elementId) {
+                $('#' + elementId).popover('hide');
             }
         },
         async mounted() {
             await this.fetch();
             let self = this;
 
-            // Init Flatpickr (with .js-flatpickr class)
-            jQuery('.js-flatpickr:not(.js-flatpickr-enabled)').each((index, element) => {
-                let el = jQuery(element);
-
-                // Add .js-flatpickr-enabled class to tag it as activated
-                el.addClass('js-flatpickr-enabled');
-
-                // Init it
-                flatpickr(el, this.flatpickrConfig);
+            $("[data-toggle='popover']").each(function(index, element) {
+                var elementId = $(element).data().target;
+                var content = $(elementId).removeClass('d-none');
+                $(elementId).remove();
+                $(element).popover({
+                    content: content,
+                    html: true
+                });
             });
+
         }
     }
 </script>
@@ -408,5 +482,16 @@
     }
     td > .datepicker {
         width:85px;
+    }
+</style>
+<style>
+    .popover_date > .form-group.row {
+        padding: 0 10px;
+    }
+    .popover-body {
+        background-color: #343a40;
+        border: 1px solid #fff;
+        border-radius: 4px;
+        color:#fff;
     }
 </style>

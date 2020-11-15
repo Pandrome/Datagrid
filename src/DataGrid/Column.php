@@ -120,7 +120,7 @@ class Column
     protected function renderHeaderValue(Filter $filter = null)
     {
         if ($this->type == Type::TYPE_DATETIME) {
-            if ($filter && stripos($filter->value(), ' to ')) {
+            if ($filter && stripos($filter->value(), 'till') !== false) {
                 return $filter->value();
             }
 

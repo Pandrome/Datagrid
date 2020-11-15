@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v1.0.11 (2020-11-15)] (https://github.com/Pandrome/Datagrid/compare/1.0.10...1.0.11)
+
+### Added
+- Added keys for all loops in datagrid component
+- Replaced flatpickr with a bootstrap popover with two input fields of type date.
+
 ## [v1.0.10 (2020-11-03)] (https://github.com/Pandrome/Datagrid/compare/1.0.9...1.0.10)
 
 ### Fixed
