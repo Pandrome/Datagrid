@@ -1,5 +1,10 @@
 # Release Notes
 
+## [v1.0.13 (2022-01-13)] (https://github.com/Pandrome/Datagrid/compare/1.0.12...1.0.13)
+
+### Fixed
+- Tag issue
+
 ## [v1.0.12 (2022-01-13)] (https://github.com/Pandrome/Datagrid/compare/1.0.11...1.0.12)
 
 ### Added
