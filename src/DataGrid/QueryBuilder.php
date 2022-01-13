@@ -94,6 +94,16 @@ class QueryBuilder
 
     protected function addLockedFilterByOperator(EloquentBuilder $query, string $operator, string $column, $value)
     {
+		if (stripos($column, '.') !== false) {
+			$this->addLockedFilterByOperatorRelation($query, $operator, $column, $value);
+			return;
+		}
+
+		$this->addLockedFilterByOperatorDefault($query, $operator, $column, $value);
+    }
+
+	protected function addLockedFilterByOperatorDefault(EloquentBuilder $query, string $operator, string $column, $value = null)
+	{
         switch($operator) {
             case 'null':
                 $query->whereNull($column);
@@ -101,6 +111,9 @@ class QueryBuilder
             case 'notnull':
                 $query->whereNotNull($column);
                 break;
+			case 'in':
+				$query->whereIn($column, $value);
+				break;
             default:
                 if (is_null($value)) {
                     break;
@@ -108,8 +121,36 @@ class QueryBuilder
                 $query->where($column, $operator, $value);
                 break;
         }
-    }
+	}
 
+	protected function addLockedFilterByOperatorRelation(EloquentBuilder $query, string $operator, string $column, $value = null)
+	{
+		$columnRelations = explode('.', $column);
+		$column = array_pop($columnRelations);
+		$column =  array_pop($columnRelations) . '.' . $column;
+		$relation = implode('.', $columnRelations);
+
+		$query->whereHas($relation, function($q) use($operator, $column, $value) {
+			switch($operator) {
+				case 'null':
+					$q->whereNull($column);
+					break;
+				case 'notnull':
+					$q->whereNotNull($column);
+					break;
+				case 'in':
+					$q->whereIn($column, $value);
+					break;
+				default:
+					if (is_null($value)) {
+						break;
+					}
+					$q->where($column, $operator, $value);
+					break;
+			}
+		});
+	}
+    
     protected function handleColumns()
     {
         foreach ($this->columnBuilder->columns() as $column) {

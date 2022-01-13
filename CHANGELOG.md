@@ -1,5 +1,10 @@
 # Release Notes
 
+## [v1.0.12 (2022-01-13)] (https://github.com/Pandrome/Datagrid/compare/1.0.11...1.0.12)
+
+### Added
+- Beter support for relational locked filters
+
 ## [v1.0.11 (2020-11-15)] (https://github.com/Pandrome/Datagrid/compare/1.0.10...1.0.11)
 
 ### Added
