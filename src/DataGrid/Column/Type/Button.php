@@ -74,7 +74,7 @@ class Button implements IType
             if (!is_string($field)) {
                 continue;
             }
-            preg_match_all('/{([a-z0-9]*?)}/', $field, $matches);
+            preg_match_all('/{([a-z0-9_.]*?)}/', $field, $matches);
             foreach ($matches[1] as $match) {
                 $matchData = $data;
                 $matchParts = explode('.', $match);

@@ -1,5 +1,10 @@
 # Release Notes
 
+## [v1.0.15 (2022-02-09)] (https://github.com/Pandrome/Datagrid/compare/1.0.14...1.0.15)
+
+### Fixed
+- Replacing values in buttons can now handle dots and underscore
+
 ## [v1.0.14 (2022-02-09)] (https://github.com/Pandrome/Datagrid/compare/1.0.13...1.0.14)
 
 ### Added
