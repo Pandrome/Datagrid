@@ -1,5 +1,10 @@
 # Release Notes
 
+## [v1.0.14 (2022-02-09)] (https://github.com/Pandrome/Datagrid/compare/1.0.13...1.0.14)
+
+### Added
+- Support for hasnot operator
+
 ## [v1.0.13 (2022-01-13)] (https://github.com/Pandrome/Datagrid/compare/1.0.12...1.0.13)
 
 ### Fixed
