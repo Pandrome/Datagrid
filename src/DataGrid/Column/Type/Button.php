@@ -79,11 +79,12 @@ class Button implements IType
                 $matchData = $data;
                 $matchParts = explode('.', $match);
 
-                if (sizeof($matchParts) > 1 && !empty($data[$matchParts[0]]) && is_array($data[$matchParts[0]])) {
-                    $matchData = $data[$matchParts[0]];
-                    $match = $matchParts[1];
+                if (!isset($matchData[$match])) {
+                    if (sizeof($matchParts) > 1 && !empty($data[$matchParts[0]]) && is_array($data[$matchParts[0]])) {
+                        $matchData = $data[$matchParts[0]];
+                        $match = $matchParts[1];
+                    }
                 }
-
                 if (isset($matchData[$match])) {
                     if ($useQuotes) {
                         $matchData[$match] = "'" . $matchData[$match] . "'";

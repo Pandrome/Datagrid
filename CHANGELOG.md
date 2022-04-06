@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v1.0.16 (2022-04-06)] (https://github.com/Pandrome/Datagrid/compare/1.0.15...1.0.16)
+
+### Fixed
+- Fixed an issue for conditional buttons with evaluating relational values
+
+
 ## [v1.0.15 (2022-02-09)] (https://github.com/Pandrome/Datagrid/compare/1.0.14...1.0.15)
 
 ### Fixed
