@@ -1,5 +1,15 @@
 # Release Notes
 
+## [v1.0.17 (2022-04-21)] (https://github.com/Pandrome/Datagrid/compare/1.0.16...1.0.17)
+
+### Fixed
+- Fixed an issue where using a filter did not reset the page to 1
+
+### Added
+- Support for scope_if_value where you can set a scope from the model that will be used if a filter value is detected
+- Support for conditional_replace where if a certain value is set for a column it will replace the value and adds a class ['{value_to_replace}' => ['value' => '{replace_value}', 'class' => '{class(es) to be added if value is found}']]
+
+
 ## [v1.0.16 (2022-04-06)] (https://github.com/Pandrome/Datagrid/compare/1.0.15...1.0.16)
 
 ### Fixed

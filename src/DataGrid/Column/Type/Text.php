@@ -17,11 +17,17 @@ class Text implements IType
             'column' => $column->column,
             'type' => $column->type,
             'value' => (string)$column->prefix . static::processOptions($column, (string)$text),
+            'class' => static::addClass($column, (string)$text),
         ];
     }
 
     protected static function processOptions(Column $column, string $text): string
     {
+        if (!empty($column->conditional_replace)) {
+            if (isset($column->conditional_replace[$text])) {
+                $text = $column->conditional_replace[$text]['value'];
+            }
+        }
         if (is_array($column->options)) {
             foreach ($column->options as $func => $parameters) {
                 if (method_exists(__CLASS__, $func)) {
@@ -36,5 +42,22 @@ class Text implements IType
     protected static function round(string $text, $decimal = 2)
     {
         return number_format((float)$text, (int)$decimal, ',', '.');
+    }
+
+    protected static function addClass(Column $column, $value): string
+    {
+        $class = [];
+        if (!empty($column->class)) {
+            $class[] = $column->class;
+        }
+        if (!empty($column->conditional_replace)) {
+            if (isset($column->conditional_replace[$value])) {
+                if (!empty($column->conditional_replace[$value]['class'])) {
+                    $class[] = $column->conditional_replace[$value]['class'];
+                }
+            }
+        }
+
+        return implode(' ', $class);
     }
 }

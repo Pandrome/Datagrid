@@ -27,7 +27,7 @@ class AType implements IType
         $value = static::value($filter);
 
         $operator = static::$operator;
-        $query->whereHas($column->relation, function($query) use ($columnName, $operator, $value) {
+        $query->whereHas($column->relation, function ($query) use ($columnName, $operator, $value) {
             $columnParts = explode('.', $columnName);
             $column = array_pop($columnParts);
             return $query->where($column, $operator, $value);
@@ -36,7 +36,14 @@ class AType implements IType
 
     protected static function useDirect(EloquentBuilder $query, Column $column, Filter $filter)
     {
-        $query->where($filter->column(), static::$operator, static::value($filter));
+        $value = static::value($filter);
+        if (!empty($column->scope_if_value)) {
+            if ($value !== '') {
+                $query = $query->{$column->scope_if_value}($value);
+            }
+            return;
+        }
+        $query = $query->where($filter->column(), static::$operator, $value);
     }
 
     protected static function value(Filter $filter)

@@ -14,6 +14,7 @@ class Column
 {
     public $class = '';
     public $column;
+    public $conditional_replace = [];
     public $default = '';
     public $format = '';
     public $hasFilter = true;
@@ -22,6 +23,7 @@ class Column
     public $model = '';
     public $options = [];
     public $relation;
+    public $scope_if_value = '';
     public $type = TYPE::TYPE_TEXT;
     public $values = [];
     public $prefix = '';
@@ -47,7 +49,7 @@ class Column
             throw new \Exception('DataGrid column type ' . $type . ' does not exist');
         }
 
-        return call_user_func(__NAMESPACE__ .'\\Column\\Type\\' . $type . '::render' , $this, $data);
+        return call_user_func(__NAMESPACE__ .'\\Column\\Type\\' . $type . '::render', $this, $data);
     }
 
     public function renderHeader(FilterBuilder $filterBuilder): array
@@ -112,7 +114,8 @@ class Column
             if ($model->{$firstColumn}() instanceof Relation) {
                 return $this->relationModel(implode('.', $columnParts), $model->{$firstColumn}()->getModel());
             }
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         return $model;
     }

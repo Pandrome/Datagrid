@@ -142,7 +142,7 @@
                             </template>
                         </template>
                         <template v-else>
-                            <span v-html="column.value"></span>
+                            <span v-html="column.value" :class="column.class"></span>
                         </template>
                     </td>
                 </tr>
@@ -269,7 +269,8 @@
             filter() {
                 this.sort = '';
                 this.direction = '';
-
+                this.page = 1;
+                
                 this.fetch();
             },
             resort(column) {
