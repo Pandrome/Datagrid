@@ -60,7 +60,7 @@ class Column
             'label' => $this->label,
             'type' => $this->type,
             'value' => $this->renderHeaderValue($filter),
-            'hasSort' => $this->hasFilter,
+            'hasSort' => $this->hasSort,
             'hasFilter' => $this->hasFilter
         ];
 

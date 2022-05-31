@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v1.0.18 (2022-05-31)] (https://github.com/Pandrome/Datagrid/compare/1.0.17...1.0.18)
+
+### Fixed
+- Fixed an issue where hasSort used the hasFilter instead of hasSort and is now usable
+
+
 ## [v1.0.17 (2022-04-21)] (https://github.com/Pandrome/Datagrid/compare/1.0.16...1.0.17)
 
 ### Fixed
