@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v1.0.19 (2022-12-15)] (https://github.com/Pandrome/Datagrid/compare/1.0.18...1.0.19)
+
+### Fixed
+- Fixed an issue with the locked relational filters
+
+
 ## [v1.0.18 (2022-05-31)] (https://github.com/Pandrome/Datagrid/compare/1.0.17...1.0.18)
 
 ### Fixed

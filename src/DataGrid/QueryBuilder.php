@@ -130,7 +130,6 @@ class QueryBuilder
     {
         $columnRelations = explode('.', $column);
         $column = array_pop($columnRelations);
-        $column =  array_pop($columnRelations) . '.' . $column;
         $relation = implode('.', $columnRelations);
 
         if ($operator == 'hasnot') {
