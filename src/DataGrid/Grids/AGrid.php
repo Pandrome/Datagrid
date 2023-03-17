@@ -49,7 +49,7 @@ abstract class AGrid implements IGrid
         $this->dataGrid->setAllowedPerPage($this->allowedPerPage);
         $this->dataGrid->setLockedFilters($this->lockedFilters);
         $this->dataGrid->setGridActions($this->gridActions);
-;        
+      
         return $this->dataGrid->build();
     }
 
