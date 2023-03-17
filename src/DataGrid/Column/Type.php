@@ -9,5 +9,6 @@ class Type
     const TYPE_SELECT = 'Select';
     const TYPE_TEXT = 'Text';
     const TYPE_ICON = 'Icon';
+    const TYPE_CHECKBOX = 'Checkbox';
     const TYPE_RELATION = 'Relation';
 }
