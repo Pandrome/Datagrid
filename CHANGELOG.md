@@ -1,9 +1,16 @@
 # Release Notes
 
+## [v1.0.23 (2023-03-20)] (https://github.com/Pandrome/Datagrid/compare/1.0.22...1.0.23)
+
+### Added
+- Not In filter for locked filters
+
+
 ## [v1.0.22 (2023-03-20)] (https://github.com/Pandrome/Datagrid/compare/1.0.21...1.0.22)
 
 ### Fixed
 - Added missing semicolon
+
 
 ## [v1.0.21 (2023-03-20)] (https://github.com/Pandrome/Datagrid/compare/1.0.20...1.0.21)
 
