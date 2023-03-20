@@ -118,7 +118,7 @@ class QueryBuilder
                 $query->whereDoesntHave($column);
                 break;
             case 'jsoncontains':
-                $query->whereJsonContains($column, $value)
+                $query->whereJsonContains($column, $value);
                 break;
             default:
                 if (is_null($value)) {
