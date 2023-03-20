@@ -469,7 +469,7 @@
                 let selectedGridAction = event.target.value;
                 if (selectedGridAction && this.selected.length) {
                     try {
-                        this.$emit("gridActionUpdate", {action:selectedGridAction, ids:this.selected});
+                        this.$emit("gridActionUpdate", {action:selectedGridAction, values:this.selected});
                     } catch (e) {
                     }
                 }
