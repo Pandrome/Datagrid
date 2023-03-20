@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v1.0.20 (2023-03-17)] (https://github.com/Pandrome/Datagrid/compare/1.0.19...1.0.20)
+
+### Added
+- Added jsoncontains for locked filters
+
+
 ## [v1.0.19 (2022-12-15)] (https://github.com/Pandrome/Datagrid/compare/1.0.18...1.0.19)
 
 ### Fixed
