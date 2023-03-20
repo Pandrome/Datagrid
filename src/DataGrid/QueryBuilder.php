@@ -114,6 +114,9 @@ class QueryBuilder
             case 'in':
                 $query->whereIn($column, $value);
                 break;
+            case 'notin':
+                $query->whereNotIn($column, $value);
+                break;
             case 'hasnot':
                 $query->whereDoesntHave($column);
                 break;
