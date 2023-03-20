@@ -1,5 +1,16 @@
 <template>
     <div :class="containerClass" :id="'datagrid_' + _uid">
+        <div v-if="gridActions.length" class="input-group mb-3 w-25">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGridActionSelect">Action</label>
+            </div>
+            <select class="custom-select" id="inputGridActionSelect" @change="gridActionChange($event)" :disabled="!selected.length">
+                <option selected></option>
+                <option v-for="(gridAction, index) in gridActions" :value="gridAction.value" :key="index">
+                    {{ gridAction.label }}
+                </option>
+            </select>
+        </div>
         <table class="table">
             <thead>
                 <tr >
@@ -83,7 +94,10 @@
                                 </div>
                             </template>
                             <template v-else-if="header.type == 'Button'"></template>
-                            <template v-else>
+                            <template v-else-if="header.type == 'Checkbox'">
+                                <input type="checkbox" v-model="selectAll">
+                            </template>
+                            <template v-else>     
                                 <input type="text" :name="header.column" v-model="header.value" class="form-control" @keyup.enter="filter" />
                             </template>
                         </template>
@@ -140,6 +154,9 @@
                             <template v-if="column.image != ''">
                                 <img :src="column.image" class="icon" />
                             </template>
+                        </template>
+                        <template v-else-if="column.type == 'Checkbox'">
+                            <input :id="'cb_' + column.name + '_' + index" type="checkbox" v-model="selected" :value="column.value">
                         </template>
                         <template v-else>
                             <span v-html="column.value" :class="column.class"></span>
@@ -248,7 +265,7 @@
             lastText: {
                 type: String,
                 default: 'Last'
-            }
+            },
         },
         data() {
             return {
@@ -262,7 +279,10 @@
                 lastPage: 1,
                 visiblePages: 5,
                 allowedPerPage: [],
-                perPage: 10
+                perPage: 10,
+                selectedValues: [],
+                selected: [],
+                gridActions: [],
             }
         },
         methods: {
@@ -352,6 +372,7 @@
                     self.page = response.data.current_page;
                     self.allowedPerPage = response.data.allowedPerPage;
                     self.perPage = response.data.per_page;
+                    self.gridActions = response.data.gridActions;
                     self.setPaginationPages();
                 }).catch(error => {
 
@@ -433,6 +454,44 @@
             },
             hideDate(elementId) {
                 $('#' + elementId).popover('hide');
+            },
+            getPageCheckboxValues(){
+                let pageCheckboxValues = [];
+                this.rows.forEach(function(row) {
+                    row.forEach(function(column) {
+                        if (column.type === "Checkbox") {
+                            pageCheckboxValues.push(column.value);
+                        }
+                    });
+                });
+                return pageCheckboxValues;
+            },
+            gridActionChange(event) {
+                let selectedGridAction = event.target.value;
+                if (selectedGridAction && this.selected.length) {
+                    try {
+                        this.$emit("gridActionUpdate", {action:selectedGridAction, ids:this.selected});
+                    } catch (e) {
+                    }
+                }
+                event.target.value = "";
+            }
+        },
+        computed: {
+            selectAll: {
+                get() {
+                    let selectedValues = this.selected;
+                    let pageCheckboxValues = this.getPageCheckboxValues();
+                    return pageCheckboxValues.every(val => selectedValues.includes(val));
+                },
+                set(isChecked) {
+                    let pageCheckboxValues = this.getPageCheckboxValues();
+                    if (isChecked) {
+                        this.selected.push(...pageCheckboxValues);
+                    } else {
+                        this.selected = this.selected.filter(val => !pageCheckboxValues.includes(val));
+                    }
+                }
             }
         },
         async mounted() {
