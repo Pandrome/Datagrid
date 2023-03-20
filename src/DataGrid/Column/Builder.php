@@ -37,7 +37,7 @@ class Builder
         }
     }
 
-    public function renderData(array $pagination, FilterBuilder $filterBuilder, OrderBy $orderBy, array $allowedPerPage): array
+    public function renderData(array $pagination, FilterBuilder $filterBuilder, OrderBy $orderBy, array $allowedPerPage, array $gridActions): array
     {
         $pagination['headers'] = $this->renderHeaders($filterBuilder);
         $filters = $filterBuilder->filters();
@@ -48,6 +48,7 @@ class Builder
         $pagination['sort'] = $orderBy->column();
         $pagination['direction'] = $orderBy->direction();
         $pagination['allowedPerPage'] = $allowedPerPage;
+        $pagination['gridActions'] = $gridActions;
 
         return $pagination;
     }

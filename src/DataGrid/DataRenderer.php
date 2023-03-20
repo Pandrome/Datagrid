@@ -27,6 +27,6 @@ class DataRenderer
 
     public function render(): array
     {
-        return $this->columnBuilder->renderData($this->pagination, $this->filterBuilder, $this->orderBy, $this->allowedPerPage);
+        return $this->columnBuilder->renderData($this->pagination, $this->filterBuilder, $this->orderBy, $this->allowedPerPage, $this->gridActions);
     }
 }
