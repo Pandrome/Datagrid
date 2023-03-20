@@ -280,7 +280,6 @@
                 visiblePages: 5,
                 allowedPerPage: [],
                 perPage: 10,
-                selectedValues: [],
                 selected: [],
                 gridActions: [],
             }
