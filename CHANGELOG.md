@@ -1,5 +1,33 @@
 # Release Notes
 
+## [v1.0.21 (2023-03-20)] (https://github.com/Pandrome/Datagrid/compare/1.0.20...1.0.21)
+
+### Added
+- Grid actions. These are actions you can emit from the datagrid after making a selection of rows and then selecting an action
+  - Backend:
+    - In the grid class add a 2d protected array specifying the actions eg:
+      `protected $gridActions = [[
+		    'label' => 'Update Pickup Date',
+		    'value' => 'update_pickup_date'
+	    ]]`;
+    - To add a checkbox column add the following entry in the $this→columns  array
+      `[
+		    'column' => 'checkbox',
+		    'label' => '',
+		    'type' => Type::TYPE_CHECKBOX,
+		    'hasSort' => false,
+		    'hasFilter' => true,
+		    'options' => [
+			    'value' => '{id}'
+		    ],
+	    ]`
+      where the value attribute inside option will be the values selected and passed to the action function.
+
+  - Frontend:
+    - The library will emit a payload with the selected action and the selected values, thus a async gridActionHandler(payload)where the payload is structured as follows:     
+      `{action:selectedGridAction, ids:selectedValues}`
+
+
 ## [v1.0.20 (2023-03-17)] (https://github.com/Pandrome/Datagrid/compare/1.0.19...1.0.20)
 
 ### Added
