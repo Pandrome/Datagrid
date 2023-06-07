@@ -124,7 +124,7 @@
                                                     :title="button.title != undefined ? button.title :''" :name="button.name != undefined ? button.name : ''"
                                                     :key="'btn_' + column.name + '_' + index">
                                                 <i :class="button.icon_class"></i>
-                                                {{button.label}}d
+                                                {{button.label}}
                                             </button>
                                         </template>
                                     </template>
