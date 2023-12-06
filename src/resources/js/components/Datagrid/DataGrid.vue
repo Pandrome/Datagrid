@@ -401,6 +401,12 @@
             },
             buttonClick(fnc, args, event) {
                 try {
+                    if (fnc.indexOf("'") != -1) {
+                        let allArgs = fnc.split(',');
+                        fnc = allArgs[0].replaceAll("'", "");
+                        args = allArgs[1].trim();
+                    }
+
                     this.$emit(fnc, { args: args, event: event});
                 } catch (e) {}
 

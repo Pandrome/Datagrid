@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v1.0.25 (2023-12-06)] (https://github.com/Pandrome/Datagrid/compare/1.0.24...1.0.25)
+
+### Changed
+- Button click on item row allows for more parameters
+
+
 ## [v1.0.24 (2023-12-06)] (https://github.com/Pandrome/Datagrid/compare/1.0.23...1.0.24)
 
 ### Added
