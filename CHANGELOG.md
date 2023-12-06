@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v1.0.24 (2023-12-06)] (https://github.com/Pandrome/Datagrid/compare/1.0.23...1.0.24)
+
+### Added
+- Added filter for duplicate header options
+
+
 ## [v1.0.23 (2023-03-20)] (https://github.com/Pandrome/Datagrid/compare/1.0.22...1.0.23)
 
 ### Added

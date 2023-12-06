@@ -71,9 +71,29 @@ class Builder
     {
         $headers = [];
         foreach ($this->columns as $column) {
-            $headers[] = $column->renderHeader($filterBuilder);
+            $header = $column->renderHeader($filterBuilder);
+            $header = $this->filterDuplicateOptions($header);
+            $headers[] = $header;
         }
 
         return $headers;
+    }
+
+    protected function filterDuplicateOptions(array $header)
+    {
+        if (!empty($header['options']) && count($header['options']) > 0) {
+            $options = [];
+            foreach ($header['options'] as $i => $option) {
+                if (!in_array($option['label'], $options)) {
+                    $options[] = $option['label'];
+                    continue;
+                }
+                unset($header['options'][$i]);
+            }
+
+            $header['options'] = array_values($header['options']);
+        }
+
+        return $header;
     }
 }
